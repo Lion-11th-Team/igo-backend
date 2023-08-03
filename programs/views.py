@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from programs.models import Program
@@ -11,7 +11,7 @@ from .permissions import IsConsumerOrReadOnly
 class ProgramViewSet(ModelViewSet):
     queryset = Program.objects.order_by('-created_at')
     serializer_class = ProgramSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsConsumerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsConsumerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
