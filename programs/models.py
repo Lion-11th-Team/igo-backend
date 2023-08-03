@@ -24,6 +24,9 @@ class Program(models.Model):
     subscriber_limit = models.IntegerField()
     subscriber = models.ManyToManyField(
         to=get_user_model(), related_name='program')
+    
+    activity_field = models.CharField(max_length=50)
+    area = models.CharField(max_length=50)
 
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()
