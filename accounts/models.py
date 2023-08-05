@@ -39,6 +39,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _('register'),
         default=False,
     )
+
+    is_student = models.BooleanField(default=False)
+    is_carer = models.BooleanField(default=False)
+
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
     oauth_id = models.CharField(
@@ -62,3 +66,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+    def set_regist(self):
+        self.is_register = 0
+        self.save()
+
+    def set_type(self, user_type):
+        if user_type == 'student':
+            self.is_student = True
+            self.is_carer = False
+        elif user_type == 'carer':
+            self.is_student = False
+            self.is_carer = True
+        self.save()

@@ -22,6 +22,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from accounts.views import AccountsInfo
 
 from auths.views import OAuthTokenObtainView
+from profiles.views import ProfileRetrieveUpdateView
 from programs.views import ProgramViewSet
 
 program_router = DefaultRouter()
@@ -30,11 +31,13 @@ program_router.register(r'program', ProgramViewSet, basename='program')
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('auth/<str:provider>/token',
+    path('auth/<str:provider>/token/',
          OAuthTokenObtainView.as_view(), name='token_obtain'),
-    path('auth/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    path('accounts', AccountsInfo.as_view(), name='info'),
+    path('accounts/', AccountsInfo.as_view(), name='info'),
 
     path('', include(program_router.urls)),
+
+    path('profile/<id:int>/', ProfileRetrieveUpdateView.as_view(), name='profile'),
 ]
