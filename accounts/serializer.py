@@ -7,4 +7,4 @@ from rest_framework.serializers import ValidationError
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        exclude = ['password', 'groups', 'user_permissions',]
+        exclude = ['password', 'groups', 'user_permissions', 'last_login']

@@ -14,7 +14,7 @@ class ProfileRetrieveUpdateView(RetrieveUpdateAPIView):
     queryset = get_user_model().objects.all()
     permission_classes = (IsAuthenticated, ProfileRetrievUpdatePermission)
 
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request, pk=None, *args, **kwargs):
         user = self.get_object()
         if user.is_student:
             serializer = StudentProfile.objects.get(user=user)

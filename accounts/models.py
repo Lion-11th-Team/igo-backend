@@ -68,7 +68,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     def set_regist(self):
-        self.is_register = 0
+        self.is_register = True
         self.save()
 
     def set_type(self, user_type):

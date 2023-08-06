@@ -4,9 +4,9 @@ from django.db import models
 
 class StudentProfile(models.Model):
     user = models.ForeignKey(
-        to=get_user_model(), related_name='profile', on_delete=models.CASCADE)
+        to=get_user_model(), related_name='student_profile', on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
-    birthdate = models.DateField()
+    birthdate = models.DateField(null=True)
     phone = models.CharField(max_length=64)
     email = models.CharField(max_length=256)
     # location = models.
@@ -14,7 +14,7 @@ class StudentProfile(models.Model):
 
 class CarerProfile(models.Model):
     user = models.ForeignKey(
-        to=get_user_model(), related_name='profile', on_delete=models.CASCADE)
+        to=get_user_model(), related_name='carer_profile', on_delete=models.CASCADE)
     facility_name = models.CharField(max_length=256)
     admin_name = models.CharField(max_length=256)
     phone = models.CharField(max_length=64)
