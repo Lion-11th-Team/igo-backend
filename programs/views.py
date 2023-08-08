@@ -7,16 +7,24 @@ from django.utils import timezone
 
 from programs.models import Program
 from programs.serializers import ProgramSerializer
-from .permissions import IsConsumerOrReadOnly
+from .permissions import IsCarerOrReadOnly, IsStudent
 
 
 class ProgramViewSet(ModelViewSet):
     queryset = Program.objects.order_by('-created_at')
     serializer_class = ProgramSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsConsumerOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly, IsCarerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+    
+    def get_permissions(self):
+        if self.action == 'subscribe':
+            permission_classes = [IsStudent]
+        else:
+            permission_classes = [IsCarerOrReadOnly]
+        return [permission() for permission in permission_classes]
+
 
     @action(detail=True, methods=('POST', 'DELETE'))
     def subscribe(self, request, *args, **kwargs):
