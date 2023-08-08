@@ -12,23 +12,30 @@ from accounts.serializer import UserSerializer
 from profiles.models import CarerProfile, StudentProfile
 from profiles.serializers import CarerProfileSerializer, StudentProfileSerializer
 
-User = get_user_model()
-
 
 class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = get_user_model().objects.all()
-    serializer_class = UserSerializer
+    # serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):
+        # POST /accounts/:id
+        # pk == id인 유저 조회, 직렬화
         user = self.get_object()
-        if user.is_student:
-            profile = StudentProfileSerializer(
-                StudentProfile.objects.get(user=user)).data
-        elif user.is_carer:
-            profile = CarerProfileSerializer(
-                CarerProfile.objects.get(user=user)).data
         data = UserSerializer(user).data
-        data['profile'] = profile
+
+        # 해당 유정의 프로필 정보 조회
+        # 존재하지 않는다면 공백
+        profile = None
+        try:
+            if user.is_student:
+                profile = StudentProfileSerializer(
+                    StudentProfile.objects.get(user=user)).data
+            elif user.is_carer:
+                profile = CarerProfileSerializer(
+                    CarerProfile.objects.get(user=user)).data
+        finally:
+            data['profile'] = profile or {}
+
         return Response(data=data)
 
     def create(self, request):
@@ -36,36 +43,8 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
         data = request.data
         query_params = request.query_params
 
-        if query_params.get('type') == 'student':
-            profile_seriailzer = StudentProfileSerializer(data=data)
-        elif query_params.get('type') == 'carer':
-            profile_seriailzer = CarerProfileSerializer(data=data)
-        else:
-            return Response({"detail": "User type not passed."}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not profile_seriailzer.is_valid():
-            return Response(profile_seriailzer.errors, status=status.HTTP_400_BAD_REQUEST)
-        profile_seriailzer.save(user=user)
-        user.set_type(query_params.get('type'))
-        user.set_regist()
-
-        data = UserSerializer(user).data
-        data['profile'] = profile_seriailzer.data
-        return Response(data=data)
-
-
-class AccountView(APIView):
-    allowed_methods = ('GET', 'POST')
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        # todo: GET /accounts/:pk -> user.pk == pk인 user -> data + user type의 profile
-        return Response(UserSerializer(request.user).data)
-
-    def post(self, request):
-        user = request.user
-        data = request.data
-        query_params = request.query_params
+        if user.is_student or user.is_carer:
+            return Response({'detail': 'This user is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
 
         if query_params.get('type') == 'student':
             profile_seriailzer = StudentProfileSerializer(data=data)

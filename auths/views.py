@@ -14,6 +14,7 @@ from accounts.managers import OAUTH_PROVIDER
 
 User = get_user_model()
 
+
 class OAuthTokenObtainView(APIView):
 
     allowed_methods = ('POST',)
@@ -51,10 +52,10 @@ class OAuthTokenObtainView(APIView):
         'google': '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',
     }
 
-### Todo: 보안을 위해 값을 숨길 것
+# Todo: 보안을 위해 값을 숨길 것
     def get_client_id(self, provider):
         return self.client_id[provider]
-    
+
     def get_client_secret(self, provider):
         return self.client_secret[provider]
 
@@ -98,16 +99,16 @@ class OAuthTokenObtainView(APIView):
                     'code': access_code,
                 }
             )
-    
+
     def get_access_token_error(self, provider: str, response: dict) -> str:
         # !!! google의 에러코드 확인된 적 없음
         if provider in ('github', 'kakao', 'google',):
             return response.get('error')
-    
+
     def get_access_token(self, provider: str, response: dict) -> str:
         if provider in ('github', 'kakao', 'google',):
             return response.get('access_token')
-    
+
     def reqeust_user_info(self, provider, access_token) -> Union[str, None]:
         return requests.get(
             self.user_info_uri[provider],
@@ -119,7 +120,7 @@ class OAuthTokenObtainView(APIView):
     def get_user_id(self, provider, response):
         if provider in ('github', 'kakao', 'google',):
             return str(response.get('id'))
-        
+
     def post(self, request, provider: str) -> Response:
         # OAuth 제공 업체 이름, 요청 body의 유효성 검사
         access_code = request.data.get('code')
@@ -130,7 +131,7 @@ class OAuthTokenObtainView(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         # access code <-> access token 교환
         response = self.request_access_token(provider, access_code)
         if response.status_code != 200:
@@ -155,18 +156,19 @@ class OAuthTokenObtainView(APIView):
 
         # OAuth 인증으로 가입한 사용자 정보 탐색
         try:
-            user = User.oauths.filter(oauth_provider=provider).get(oauth_id=oauth_id)
+            user = User.oauths.filter(
+                oauth_provider=provider).get(oauth_id=oauth_id)
         except User.DoesNotExist as e:
-            user = User.oauths.create_user(oauth_provider=provider, oauth_id=oauth_id)
-        
+            user = User.oauths.create_user(
+                oauth_provider=provider, oauth_id=oauth_id)
+
         # JWT 발급, 응답
         refresh = RefreshToken.for_user(user)
         return Response(
             {
                 'access': str(refresh.access_token),
                 'refresh': str(refresh),
-                'register_state': user.is_register,
+                'is_register': user.is_register,
             },
             status=status.HTTP_200_OK,
         )
-        

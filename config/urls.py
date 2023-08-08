@@ -19,7 +19,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from rest_framework_simplejwt.views import TokenRefreshView
-from accounts.views import AccountCreateRetrieveViewSet, AccountView
+from accounts.views import AccountCreateRetrieveViewSet
 
 from auths.views import OAuthTokenObtainView
 from profiles.views import ProfileRetrieveUpdateView
@@ -38,7 +38,6 @@ urlpatterns = [
     path('auth/<str:provider>/token',
          OAuthTokenObtainView.as_view(), name='token_obtain'),
     path('auth/refresh', TokenRefreshView.as_view(), name='token_refresh'),
-    # path('accounts/', AccountCreateRetrieveView.as_view()),
 
     path('', include(program_router.urls)),
     path('', include(account_router.urls)),
