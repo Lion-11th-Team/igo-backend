@@ -14,6 +14,7 @@ class Program(models.Model):
     author = models.ForeignKey(
         to=get_user_model(), related_name='author', on_delete=models.CASCADE)
     content = models.TextField()
+    reward = models.IntegerField()
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
