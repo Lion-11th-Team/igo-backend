@@ -40,16 +40,16 @@ class OAuthTokenObtainView(APIView):
 
 ### SECRET ###
     client_id = {
-        'github': '9b1df8c5638f9aab5523',
+        'github': 'd7ceb7c77749c6399abe',
         'kakao': 'c98455cce815417ca28f9a973d9a24a7',
-        'google': '374838732950-m9o6ik80g35uf9j7u7mh5jrhatl8869n.apps.googleusercontent.com',
+        'google': '670470419742-dntothjjjgs985sa8vr2nfkv1o3e37t2.apps.googleusercontent.com',
     }
 
 ### SECRET ###
     client_secret = {
-        'github': 'c00b4a7450430a65f2bbc90bfcac0d5cd85aa8d9',
+        'github': '09a3c93c673c3b7aa1c4ee317d88c602bf3bfcea',
         'kakao': '',
-        'google': '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',
+        'google': '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',
     }
 
 # Todo: 보안을 위해 값을 숨길 것

@@ -16,6 +16,7 @@ from profiles.serializers import CarerProfileSerializer, StudentProfileSerialize
 class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = get_user_model().objects.all()
     # serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
 
     def retrieve(self, request, *args, **kwargs):
         # POST /accounts/:id

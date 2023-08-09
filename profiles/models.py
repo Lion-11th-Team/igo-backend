@@ -6,7 +6,7 @@ class StudentProfile(models.Model):
     user = models.ForeignKey(
         to=get_user_model(), related_name='student_profile', on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
-    birthdate = models.DateField(null=True)
+    birthdate = models.DateField()
     phone = models.CharField(max_length=64)
     email = models.CharField(max_length=256)
     # location = models.

@@ -40,4 +40,4 @@ class Program(models.Model):
 
     @property
     def is_registing(self):
-        return self.regist_start_at <= timezone.now() <= self.regist_end_at and self.subscriber.count < self.subscriber_limit
+        return self.regist_start_at <= timezone.now() <= self.regist_end_at and self.subscriber.count() < self.subscriber_limit
