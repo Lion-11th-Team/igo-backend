@@ -31,7 +31,7 @@ class Program(models.Model):
         to=get_user_model(), related_name='program')
 
     activity_category = models.CharField(
-        max_length=100, choices=ACTIVITY_CATEGORY_CHOICES)
+        max_length=100, choices=ACTIVITY_CATEGORY_CHOICES, blank=True)
     # location = models.CharField(max_length=50)
 
     def save(self, *args, **kwargs):
