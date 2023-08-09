@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'points',
     'profiles',
     'programs',
+    'rentals',
 
     'corsheaders',
     'rest_framework',
