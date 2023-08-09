@@ -29,8 +29,8 @@ class Program(models.Model):
     subscriber = models.ManyToManyField(
         to=get_user_model(), related_name='program')
 
-    activity_category = models.ManyToManyField(
-        choices=ACTIVITY_CATEGORY_CHOICES)
+    activity_category = models.CharField(
+        max_length=100, choices=ACTIVITY_CATEGORY_CHOICES)
     # location = models.CharField(max_length=50)
 
     def save(self, *args, **kwargs):
