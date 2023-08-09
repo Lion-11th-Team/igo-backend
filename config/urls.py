@@ -24,6 +24,7 @@ from accounts.views import AccountCreateRetrieveViewSet
 from auths.views import OAuthTokenObtainView
 from profiles.views import ProfileRetrieveUpdateView
 from programs.views import ProgramViewSet
+from rentals.views import RentalListRetrieveViewSet
 
 account_router = DefaultRouter()
 account_router.register(
@@ -31,6 +32,9 @@ account_router.register(
 
 program_router = DefaultRouter()
 program_router.register(r'program', ProgramViewSet, basename='program')
+
+rental_router = DefaultRouter()
+rental_router.register(r'rental', RentalListRetrieveViewSet, basename='rental')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,6 +45,7 @@ urlpatterns = [
 
     path('', include(program_router.urls)),
     path('', include(account_router.urls)),
+    path('', include(rental_router.urls)),
 
     path('profile/<int:id>/', ProfileRetrieveUpdateView.as_view(), name='profile'),
 ]
