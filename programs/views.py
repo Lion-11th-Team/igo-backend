@@ -32,17 +32,17 @@ class ProgramViewSet(ModelViewSet):
     def subscribe(self, request, *args, **kwargs):
         program = self.get_object()
 
-        if program.is_registing:
-            if request.method == 'POST':
-                program.subscriber.add(request.user)
-                program.subscriber_num += 1
-                program.save()
-                return Response(self.serializer_class(program).data)
-            elif request.method == 'DELETE':
-                program.subscriber.remove(request.user)
-                program.subscriber_num -= 1
-                program.save()
-                return Response(self.serializer_class(program).data)
-        else:
+        if not program.is_registing:
             return Response({"detail": "현재는 프로그램 모집 기간이 아닙니다."},
                             status=status.HTTP_400_BAD_REQUEST)
+
+        if request.method == 'POST':
+            program.subscriber.add(request.user)
+            program.subscriber_num += 1
+            program.save()
+            return Response(self.serializer_class(program).data)
+        elif request.method == 'DELETE':
+            program.subscriber.remove(request.user)
+            program.subscriber_num -= 1
+            program.save()
+            return Response(self.serializer_class(program).data)
