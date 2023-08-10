@@ -12,12 +12,12 @@ from rest_framework.decorators import action
 from accounts.serializer import UserSerializer
 from profiles.models import CarerProfile, StudentProfile
 from profiles.serializers import CarerProfileSerializer, StudentProfileSerializer
+from programs.models import Program
 from programs.serializers import ProgramSerializer
 
 
 class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = get_user_model().objects.all()
-    # serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
     def retrieve(self, request, *args, **kwargs):
@@ -65,15 +65,14 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
         data = UserSerializer(user).data
         data['profile'] = profile_seriailzer.data
         return Response(data=data)
-    
-    @action(detail=True, methods=('GET'))
+
+    @action(detail=True, methods=('GET',))
     def program(self, request, *args, **kwargs):
         user = self.get_object()
 
         if user.is_student:
             return Response({'detail': 'This user is not a carer.'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        programs = self.queryset.filter(pk=user.pk)
+
+        programs = Program.objects.filter(author=user)
         serializer = ProgramSerializer(programs, many=True)
         return Response(serializer.data)
-
