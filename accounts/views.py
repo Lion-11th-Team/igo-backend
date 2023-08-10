@@ -7,10 +7,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.decorators import action
 
 from accounts.serializer import UserSerializer
 from profiles.models import CarerProfile, StudentProfile
 from profiles.serializers import CarerProfileSerializer, StudentProfileSerializer
+from rentals.models import RentalContract
+from rentals.serializers import RentalContractSerializer
 
 
 class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
@@ -63,3 +66,10 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
         data = UserSerializer(user).data
         data['profile'] = profile_seriailzer.data
         return Response(data=data)
+
+    @action(detail=True, methods=['GET'])
+    def rental(self, request, *args, **kwargs):
+        user = self.get_object()
+        rental_contracts = RentalContract.objects.filter(borrower=user)
+        serializer = RentalContractSerializer(rental_contracts, many=True)
+        return Response(serializer.data)
