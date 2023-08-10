@@ -12,12 +12,26 @@ from accounts.serializer import UserSerializer
 from profiles.models import CarerProfile, StudentProfile
 from profiles.serializers import CarerProfileSerializer, StudentProfileSerializer
 
+from rest_framework.decorators import action
+from programs.models import Program
+from programs.serializers import ProgramSerializer
+
 
 class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = get_user_model().objects.all()
     # serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
+    @action(detail=True, methods=('GET',))
+    def Search_program(self, request, *args, **kwargs):
+        user =  request.data
+        if user.is_student:
+            SpecificProgram = ProgramSerializer(Program.obhects.filter(subscriber__in=user), many=True)
+            return Response(SpecificProgram)
+        else:
+            return Response({"detail": "사용자 유형을 확인해주십시오."},
+                            status=status.HTTP_400_BAD_REQUEST)
+    
     def retrieve(self, request, *args, **kwargs):
         # POST /accounts/:id
         # pk == id인 유저 조회, 직렬화
