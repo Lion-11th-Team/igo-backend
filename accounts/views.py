@@ -31,13 +31,13 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
         user = request.user
 
         if user.is_student:
-            programs = Program.objects.filter(subscribe=user)
+            programs = Program.objects.filter(subscriber=user)
             SpecificProgram = ProgramSerializer(programs, many=True)
             return Response(SpecificProgram.data)
         else:
             return Response({"detail": "사용자 유형을 확인해주십시오."},
                             status=status.HTTP_400_BAD_REQUEST)
-    
+
     def retrieve(self, request, *args, **kwargs):
         # POST /accounts/:id
         # pk == id인 유저 조회, 직렬화
