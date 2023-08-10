@@ -1,18 +1,19 @@
 from rest_framework import permissions
 
 
-class IsConsumerOrReadOnly(permissions.BasePermission):
-    # 인증된 유저에 대해 목록 조회, consumer만 등록 허용
+class IsStudent(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method == 'POST':
-            return request.user.is_carer
-        return request.user.is_authenticated
+        return request.user.is_authenticated and request.user.is_student
+
+
+class IsCarer(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.is_carer
+
+
+class IsProgramAuthor(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.is_carer
 
     def has_object_permission(self, request, view, obj):
-        # 읽기 권한 요청이 들어오면 허용(SAFE_METHOD: GET, HEAD, OPTIONS)
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # PUT, PATCH, DELETE 경우에
-        if request.user.is_carer:
-            # 요청자(request.user)가 객체(Program)의 user와 동일한지 확인
-            return obj.author == request.user
+        return request.user.is_authenticated and request.user.is_carer and obj.author == request.user
