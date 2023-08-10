@@ -31,6 +31,9 @@ class RentalListRetrieveViewSet(ListModelMixin, RetrieveModelMixin, GenericViewS
             data = request.data
             data['borrower'] = user.pk
             data['rental'] = rental.pk
+            data['rental_start_at'] = rental.rental_start_at
+            data['rental_end_at'] = rental.rental_end_at
+
             serializer = RentalContractSerializer(data=data)
             if not serializer.is_valid():
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

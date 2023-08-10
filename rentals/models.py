@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -13,6 +14,8 @@ class Rental(models.Model):
     battery_capacity = models.IntegerField()
     memory_amount = models.IntegerField()
     is_active = models.BooleanField(default=True)
+    rental_start_at = models.DateField()
+    rental_end_at = models.DateField()
     point = models.IntegerField()
 
 
@@ -29,3 +32,12 @@ class RentalContract(models.Model):
     addressee_name = models.CharField(max_length=256)
     addressee_phone = models.CharField(max_length=64)
     address = models.CharField(max_length=256)
+
+    @property
+    def status(self):
+        if timezone.now().date() < self.rental_start_at:
+            return 'before'
+        elif self.rental_start_at <= timezone.now().date() <= self.rental_end_at:
+            return 'now'
+        else:
+            return 'done'

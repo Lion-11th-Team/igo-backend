@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
@@ -11,6 +13,8 @@ class RentalListRetrieveSerializer(ModelSerializer):
 
 
 class RentalContractSerializer(ModelSerializer):
+    status = serializers.ReadOnlyField()
+
     class Meta():
         model = RentalContract
         fields = '__all__'

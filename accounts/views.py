@@ -12,8 +12,6 @@ from rest_framework.decorators import action
 from accounts.serializer import UserSerializer
 from profiles.models import CarerProfile, StudentProfile
 from profiles.serializers import CarerProfileSerializer, StudentProfileSerializer
-from programs.models import Program
-from programs.serializers import ProgramSerializer
 
 
 class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
@@ -75,4 +73,11 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
 
         programs = Program.objects.filter(author=user)
         serializer = ProgramSerializer(programs, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['GET'])
+    def rental(self, request, *args, **kwargs):
+        user = self.get_object()
+        rental_contracts = RentalContract.objects.filter(borrower=user)
+        serializer = RentalContractSerializer(rental_contracts, many=True)
         return Response(serializer.data)
