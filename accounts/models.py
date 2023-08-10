@@ -64,6 +64,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
     oauths = OAuthUserManager()
 
+    point = models.IntegerField(default=0)
+
     def __str__(self):
         return self.username
 

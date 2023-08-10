@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 
 class Rental(models.Model):
@@ -13,3 +14,18 @@ class Rental(models.Model):
     memory_amount = models.IntegerField()
     is_active = models.BooleanField(default=True)
     point = models.IntegerField()
+
+
+class RentalContract(models.Model):
+    borrower = models.ForeignKey(
+        to=get_user_model(), related_name="rental_contract", on_delete=models.CASCADE)
+    rental = models.ForeignKey(
+        to=Rental, related_name='rental_contract', on_delete=models.CASCADE)
+
+    subscribe_date = models.DateField(auto_now_add=True)
+    rental_start_at = models.DateField()
+    rental_end_at = models.DateField()
+
+    addressee_name = models.CharField(max_length=256)
+    addressee_phone = models.CharField(max_length=64)
+    address = models.CharField(max_length=256)
