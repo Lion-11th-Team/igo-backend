@@ -7,10 +7,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.decorators import action
 
 from accounts.serializer import UserSerializer
 from profiles.models import CarerProfile, StudentProfile
 from profiles.serializers import CarerProfileSerializer, StudentProfileSerializer
+from programs.serializers import ProgramSerializer
 
 
 class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
@@ -24,7 +26,7 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
         user = self.get_object()
         data = UserSerializer(user).data
 
-        # 해당 유정의 프로필 정보 조회
+        # 해당 유저의 프로필 정보 조회
         # 존재하지 않는다면 공백
         profile = None
         try:
@@ -62,4 +64,13 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
 
         data = UserSerializer(user).data
         data['profile'] = profile_seriailzer.data
+        return Response(data=data)
+    
+    @action(detail=True, methods=('GET'))
+    def program(self, request, pk=None, *args, **kwargs):
+        user=self.get_object()
+        data = ProgramSerializer(user).data
+
+        if user.is_student:
+            return Response({'detail': 'This user is not a carer.'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data=data)
