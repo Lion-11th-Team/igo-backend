@@ -26,7 +26,6 @@ class Program(models.Model):
     activity_end_at = models.DateTimeField()
 
     subscriber_limit = models.IntegerField()
-    subscriber_num = models.IntegerField(default=0)
     subscriber = models.ManyToManyField(
         to=get_user_model(), related_name='program')
 

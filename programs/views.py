@@ -38,11 +38,9 @@ class ProgramViewSet(ModelViewSet):
 
         if request.method == 'POST':
             program.subscriber.add(request.user)
-            program.subscriber_num += 1
             program.save()
             return Response(self.serializer_class(program).data)
         elif request.method == 'DELETE':
             program.subscriber.remove(request.user)
-            program.subscriber_num -= 1
             program.save()
             return Response(self.serializer_class(program).data)
