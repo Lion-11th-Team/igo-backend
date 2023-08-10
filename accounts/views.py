@@ -17,11 +17,27 @@ from programs.serializers import ProgramSerializer
 from rentals.models import RentalContract
 from rentals.serializers import RentalContractSerializer
 
+from rest_framework.decorators import action
+from programs.models import Program
+from programs.serializers import ProgramSerializer
+
 
 class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = get_user_model().objects.all()
     permission_classes = (IsAuthenticated,)
 
+    @action(detail=True, methods=('GET',))
+    def subscribe(self, request, *args, **kwargs):
+        user = request.user
+
+        if user.is_student:
+            programs = Program.objects.filter(subscribe=user)
+            SpecificProgram = ProgramSerializer(programs, many=True)
+            return Response(SpecificProgram.data)
+        else:
+            return Response({"detail": "사용자 유형을 확인해주십시오."},
+                            status=status.HTTP_400_BAD_REQUEST)
+    
     def retrieve(self, request, *args, **kwargs):
         # POST /accounts/:id
         # pk == id인 유저 조회, 직렬화
