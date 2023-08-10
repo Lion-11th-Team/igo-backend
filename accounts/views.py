@@ -23,11 +23,13 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
     permission_classes = (IsAuthenticated,)
 
     @action(detail=True, methods=('GET',))
-    def Search_program(self, request, *args, **kwargs):
-        user =  request.data
+    def subscribe(self, request, *args, **kwargs):
+        user = request.user
+
         if user.is_student:
-            SpecificProgram = ProgramSerializer(Program.obhects.filter(subscriber__in=user), many=True)
-            return Response(SpecificProgram)
+            programs = Program.objects.filter(subscribe=user)
+            SpecificProgram = ProgramSerializer(programs, many=True)
+            return Response(SpecificProgram.data)
         else:
             return Response({"detail": "사용자 유형을 확인해주십시오."},
                             status=status.HTTP_400_BAD_REQUEST)
