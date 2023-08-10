@@ -14,6 +14,8 @@ class Rental(models.Model):
     battery_capacity = models.IntegerField()
     memory_amount = models.IntegerField()
     is_active = models.BooleanField(default=True)
+    rental_start_at = models.DateField()
+    rental_end_at = models.DateField()
     point = models.IntegerField()
 
 
