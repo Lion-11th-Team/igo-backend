@@ -67,10 +67,13 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
         return Response(data=data)
     
     @action(detail=True, methods=('GET'))
-    def program(self, request, pk=None, *args, **kwargs):
-        user=self.get_object()
-        data = ProgramSerializer(user).data
+    def program(self, request, *args, **kwargs):
+        user = self.get_object()
 
         if user.is_student:
             return Response({'detail': 'This user is not a carer.'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(data=data)
+        
+        programs = self.queryset.filter(pk=user.pk)
+        serializer = ProgramSerializer(programs, many=True)
+        return Response(serializer.data)
+
