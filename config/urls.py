@@ -50,7 +50,7 @@ urlpatterns = [
     path('', include(program_router.urls)),
     path('', include(account_router.urls)),
     path('', include(rental_router.urls)),
-    path('', include(donation_router.urls))
+    path('', include(donation_router.urls)),
 
     path('profile/<int:id>/', ProfileRetrieveUpdateView.as_view(), name='profile'),
 ]
