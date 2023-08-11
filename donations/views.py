@@ -19,7 +19,9 @@ class DonationViewSet(ModelViewSet):
         return [permission() for permission in permission_classes]
     
     @action(detail=True, methods=('POST',))
-    def donations(self, request, *args, **kwargs):
-        donation_record= DonationSerializer(data=request.data)
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        donation_record= Donation(**data)
         donation_record.save()
-        return Response(donation_record.data)
+        donation_serializer = DonationSerializer(donation_record)
+        return Response(donation_serializer.data)
