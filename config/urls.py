@@ -25,6 +25,7 @@ from auths.views import OAuthTokenObtainView
 from profiles.views import ProfileRetrieveUpdateView
 from programs.views import ProgramViewSet
 from rentals.views import RentalListRetrieveViewSet
+from donations.views import DonationViewSet
 
 account_router = DefaultRouter()
 account_router.register(
@@ -36,6 +37,9 @@ program_router.register(r'program', ProgramViewSet, basename='program')
 rental_router = DefaultRouter()
 rental_router.register(r'rental', RentalListRetrieveViewSet, basename='rental')
 
+donation_router = DefaultRouter()
+donation_router.register(r'donation', DonationViewSet, basename='donation')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -46,6 +50,7 @@ urlpatterns = [
     path('', include(program_router.urls)),
     path('', include(account_router.urls)),
     path('', include(rental_router.urls)),
+    path('', include(donation_router.urls)),
 
     path('profile/<int:id>/', ProfileRetrieveUpdateView.as_view(), name='profile'),
 ]
