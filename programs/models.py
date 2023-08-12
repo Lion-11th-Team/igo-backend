@@ -54,7 +54,7 @@ class Program(models.Model):
     def regist_status(self):
         if timezone.now().date() < self.regist_start_at:
             return 'before'
-        elif self.regist_start_at <= timezone.now().date() <= self.regist_end_at and self.is_registing:
+        elif self.is_registing:
             return 'now'
         else:
             return 'done'
