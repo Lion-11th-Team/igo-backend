@@ -26,22 +26,7 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
     queryset = get_user_model().objects.all()
     permission_classes = (IsAuthenticated,)
 
-    @action(detail=True, methods=('GET',))
-    def subscribe(self, request, *args, **kwargs):
-        user = request.user
-
-        if user.is_student:
-            programs = Program.objects.filter(subscriber=user)
-            SpecificProgram = ProgramSerializer(programs, many=True)
-            return Response(SpecificProgram.data)
-        else:
-            return Response({"detail": "사용자 유형을 확인해주십시오."},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-    def retrieve(self, request, *args, **kwargs):
-        # POST /accounts/:id
-        # pk == id인 유저 조회, 직렬화
-        user = self.get_object()
+    def user_info(self, user):
         data = UserSerializer(user).data
 
         # 해당 유저의 프로필 정보 조회
@@ -58,6 +43,12 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
             data['profile'] = profile or {}
 
         return Response(data=data)
+
+    def list(self, request, *args, **kwargs):
+        return self.user_info(request.user)
+
+    def retrieve(self, request, *args, **kwargs):
+        return self.user_info(self.get_object())
 
     def create(self, request):
         user = request.user
@@ -101,3 +92,15 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
         rental_contracts = RentalContract.objects.filter(borrower=user)
         serializer = RentalContractSerializer(rental_contracts, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=('GET',))
+    def subscribe(self, request, *args, **kwargs):
+        user = request.user
+
+        if user.is_student:
+            programs = Program.objects.filter(subscriber=user)
+            SpecificProgram = ProgramSerializer(programs, many=True)
+            return Response(SpecificProgram.data)
+        else:
+            return Response({"detail": "사용자 유형을 확인해주십시오."},
+                            status=status.HTTP_400_BAD_REQUEST)
