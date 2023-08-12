@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls.static import static
 
 from rest_framework.routers import DefaultRouter
 
@@ -22,6 +23,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from accounts.views import AccountCreateRetrieveViewSet
 
 from auths.views import OAuthTokenObtainView
+from config import settings
 from profiles.views import ProfileRetrieveUpdateView
 from programs.views import ProgramViewSet
 from rentals.views import RentalListRetrieveViewSet
@@ -47,10 +49,11 @@ urlpatterns = [
          OAuthTokenObtainView.as_view(), name='token_obtain'),
     path('auth/refresh', TokenRefreshView.as_view(), name='token_refresh'),
 
+    path('profile/<int:id>/', ProfileRetrieveUpdateView.as_view(), name='profile'),
+
     path('', include(program_router.urls)),
     path('', include(account_router.urls)),
     path('', include(rental_router.urls)),
     path('', include(donation_router.urls)),
 
-    path('profile/<int:id>/', ProfileRetrieveUpdateView.as_view(), name='profile'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
