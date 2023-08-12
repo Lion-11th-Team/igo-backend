@@ -19,11 +19,11 @@ class Program(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
-    regist_start_at = models.DateTimeField()
-    regist_end_at = models.DateTimeField()
+    regist_start_at = models.DateField()
+    regist_end_at = models.DateField()
 
-    activity_start_at = models.DateTimeField()
-    activity_end_at = models.DateTimeField()
+    activity_start_at = models.DateField()
+    activity_end_at = models.DateField()
 
     subscriber_limit = models.IntegerField()
     subscriber = models.ManyToManyField(
@@ -40,3 +40,21 @@ class Program(models.Model):
     @property
     def is_registing(self):
         return self.regist_start_at <= timezone.now() <= self.regist_end_at and self.subscriber.count() < self.subscriber_limit
+
+    @property
+    def activity_status(self):
+        if timezone.now().date() < self.activity_start_at:
+            return 'before'
+        elif self.activity_start_at <= timezone.now().date() <= self.activity_end_at:
+            return 'now'
+        else:
+            return 'done'
+
+    @property
+    def regist_status(self):
+        if timezone.now().date() < self.regist_start_at:
+            return 'before'
+        elif self.regist_start_at <= timezone.now().date() <= self.regist_end_at:
+            return 'now'
+        else:
+            return 'done'
