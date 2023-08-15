@@ -33,6 +33,8 @@ class Program(models.Model):
         max_length=100, choices=ACTIVITY_CATEGORY_CHOICES, blank=True)
     # location = models.CharField(max_length=50)
 
+    is_rewarded = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()
         super().save(*args, **kwargs)
