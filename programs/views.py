@@ -22,7 +22,7 @@ class ProgramViewSet(ModelViewSet):
             permission_classes = [IsAuthenticated, IsStudent]
         elif self.action in ['create']:
             permission_classes = [IsAuthenticated, IsCarer]
-        elif self.action in ['update', 'partial_update', 'delete']:
+        elif self.action in ['update', 'partial_update', 'destroy']:
             permission_classes = [IsAuthenticated, IsCarer, IsProgramAuthor]
         else:
             permission_classes = [IsAuthenticated]
