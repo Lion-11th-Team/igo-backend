@@ -20,6 +20,8 @@ class ProgramViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action == 'subscribe':
             permission_classes = [IsAuthenticated, IsStudent]
+        elif self.action == 'authenticate':
+            permission_classes = [IsAuthenticated, IsCarer, IsProgramAuthor]
         elif self.action in ['create']:
             permission_classes = [IsAuthenticated, IsCarer]
         elif self.action in ['update', 'partial_update', 'destroy']:
@@ -44,3 +46,15 @@ class ProgramViewSet(ModelViewSet):
             program.subscriber.remove(request.user)
             program.save()
             return Response(self.serializer_class(program).data)
+
+    @action(detail=True, methods=('POST',))
+    def authenticate(self, request, *args, **kwargs):
+        program = self.get_object()
+        if program.activity_status != 'done' or program.is_rewarded == True:
+            return Response({'detail': 'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
+        for user in program.subscriber.all():
+            user.point += program.reward
+            user.save()
+        program.is_rewarded = True
+        program.save()
+        return Response(ProgramSerializer(program).data)
