@@ -34,17 +34,16 @@ class ProgramViewSet(ModelViewSet):
     def subscribe(self, request, *args, **kwargs):
         program = self.get_object()
 
-        if not program.regist_start_at <= timezone.now().date() <= program.regist_end_at:
-            return Response({"detail": "현재는 프로그램 모집 기간이 아닙니다."},
-                            status=status.HTTP_400_BAD_REQUEST)
-
         if request.method == 'POST':
             if not program.is_registing:
-                return Response({"detail": "신청인원이 초과되었습니다."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"detail": "현재는 프로그램 모집 기간이 아닙니다."}, status=status.HTTP_400_BAD_REQUEST)
             program.subscriber.add(request.user)
             program.save()
             return Response(self.serializer_class(program).data)
         elif request.method == 'DELETE':
+            if not program.regist_start_at <= timezone.now().date() <= program.regist_end_at:
+                return Response({"detail": "현재는 프로그램 모집 기간이 아닙니다."},
+                                status=status.HTTP_400_BAD_REQUEST)
             program.subscriber.remove(request.user)
             program.save()
             return Response(self.serializer_class(program).data)
