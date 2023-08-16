@@ -3,9 +3,10 @@ from django.utils import timezone
 from django.db import models
 
 ACTIVITY_CATEGORY_CHOICES = (
-    ('kiosk', '키오스크'),
-    ('app_payment', '앱 결제'),
-    ('bank_transfer', '계좌 이체'),
+    ('스마트폰 사용법', '스마트폰 사용법'),
+    ('SNS 활용법', 'SNS 활용법'),
+    ('유튜브 활용법', '유튜브 활용법'),
+    ('키오스크 활용', '키오스크 활용'),
 )
 
 
