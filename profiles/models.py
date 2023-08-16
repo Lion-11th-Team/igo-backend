@@ -10,7 +10,7 @@ class StudentProfile(models.Model):
     birthdate = models.DateField()
     phone = models.CharField(max_length=64)
     email = models.CharField(max_length=256)
-    # location = models.
+    address = models.CharField(max_length=256)
 
 
 class CarerProfile(models.Model):
@@ -21,4 +21,4 @@ class CarerProfile(models.Model):
     image = models.ImageField(default='default_profile.png')
     phone = models.CharField(max_length=64)
     email = models.CharField(max_length=256)
-    # location = models.
+    address = models.CharField(max_length=256)

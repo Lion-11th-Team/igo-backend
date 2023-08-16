@@ -31,7 +31,7 @@ class Program(models.Model):
 
     activity_category = models.CharField(
         max_length=100, choices=ACTIVITY_CATEGORY_CHOICES, blank=True)
-    # location = models.CharField(max_length=50)
+    address = models.CharField(max_length=256)
 
     is_rewarded = models.BooleanField(default=False)
 

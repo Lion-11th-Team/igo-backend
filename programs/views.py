@@ -1,9 +1,11 @@
+from django.utils import timezone
+from django.db.models import Q
+
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from django.utils import timezone
 
 from programs.models import Program
 from programs.serializers import ProgramSerializer
@@ -11,11 +13,18 @@ from .permissions import IsCarer, IsProgramAuthor, IsStudent
 
 
 class ProgramViewSet(ModelViewSet):
-    queryset = Program.objects.order_by('-created_at')
     serializer_class = ProgramSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    def get_queryset(self):
+        queryset = Program.objects.order_by('-created_at')
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(
+                Q(title__icontains=search_query) | Q(content__icontains=search_query) | Q(address__icontains=search_query))
+        return queryset
 
     def get_permissions(self):
         if self.action == 'subscribe':
