@@ -13,6 +13,7 @@ class ProgramSerializer(ModelSerializer):
 
     activity_status = serializers.ReadOnlyField()
     regist_status = serializers.ReadOnlyField()
+    address = serializers.ReadOnlyField()
 
     class Meta:
         model = Program

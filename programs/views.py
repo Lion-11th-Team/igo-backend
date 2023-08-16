@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from profiles.models import CarerProfile
 
 from programs.models import Program
 from programs.serializers import ProgramSerializer
@@ -16,7 +17,8 @@ class ProgramViewSet(ModelViewSet):
     serializer_class = ProgramSerializer
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user,
+                        address=CarerProfile.objects.get(user=self.request.user).address)
 
     def get_queryset(self):
         queryset = Program.objects.order_by('-created_at')
