@@ -1,3 +1,4 @@
+import os
 from typing import Union
 import requests
 
@@ -20,11 +21,11 @@ class OAuthTokenObtainView(APIView):
     allowed_methods = ('POST',)
     permission_classes = (AllowAny,)
 
-    redirect_uri = {
-        'github': 'http://localhost:3000/githubCallback',
-        'kakao': 'http://localhost:3000/kakaoCallback',
-        'google': 'http://localhost:3000/googleCallback'
-    }
+    # redirect_uri = {
+    #     'github': 'http://localhost:3000/githubCallback',
+    #     'kakao': 'http://localhost:3000/kakaoCallback',
+    #     'google': 'http://localhost:3000/googleCallback'
+    # }
 
     access_token_uri = {
         'github': 'https://github.com/login/oauth/access_token',
@@ -38,26 +39,15 @@ class OAuthTokenObtainView(APIView):
         'google': 'https://www.googleapis.com/oauth2/v1/userinfo'
     }
 
-### SECRET ###
-    client_id = {
-        'github': 'd7ceb7c77749c6399abe',
-        'kakao': 'c98455cce815417ca28f9a973d9a24a7',
-        'google': '670470419742-dntothjjjgs985sa8vr2nfkv1o3e37t2.apps.googleusercontent.com',
-    }
-
-### SECRET ###
-    client_secret = {
-        'github': '09a3c93c673c3b7aa1c4ee317d88c602bf3bfcea',
-        'kakao': '',
-        'google': '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',
-    }
-
-# Todo: 보안을 위해 값을 숨길 것
     def get_client_id(self, provider):
-        return self.client_id[provider]
+        print(os.getenv('REACT_APP_' + provider.upper() + '_CLIENT_ID'))
+        return os.getenv('REACT_APP_' + provider.upper() + '_CLIENT_ID')
 
     def get_client_secret(self, provider):
-        return self.client_secret[provider]
+        return os.getenv('REACT_APP_' + provider.upper() + '_SECRET_KEY')
+
+    def get_redirect_uri(self, provider):
+        return os.getenv(provider.upper() + '_REDIRECT_URI')
 
     def request_access_token(self, provider: str, access_code: str) -> dict:
         if provider == 'github':
@@ -81,7 +71,7 @@ class OAuthTokenObtainView(APIView):
                 data={
                     'grant_type': 'authorization_code',
                     'client_id': self.get_client_id(provider),
-                    'redirect_uri': self.redirect_uri[provider],
+                    'redirect_uri': self.get_redirect_uri(provider),
                     'code': access_code,
                 }
             )
@@ -95,7 +85,7 @@ class OAuthTokenObtainView(APIView):
                     'grant_type': 'authorization_code',
                     'client_id': self.get_client_id(provider),
                     'client_secret': self.get_client_secret(provider),
-                    'redirect_uri': self.redirect_uri[provider],
+                    'redirect_uri': self.get_redirect_uri(provider),
                     'code': access_code,
                 }
             )
