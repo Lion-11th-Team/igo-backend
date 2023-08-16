@@ -40,7 +40,6 @@ class OAuthTokenObtainView(APIView):
     }
 
     def get_client_id(self, provider):
-        print(os.getenv('REACT_APP_' + provider.upper() + '_CLIENT_ID'))
         return os.getenv('REACT_APP_' + provider.upper() + '_CLIENT_ID')
 
     def get_client_secret(self, provider):
