@@ -95,7 +95,7 @@ class AccountCreateRetrieveViewSet(CreateModelMixin, RetrieveModelMixin, Generic
 
     @action(detail=True, methods=('GET',))
     def subscribe(self, request, *args, **kwargs):
-        user = request.user
+        user = self.get_object()
 
         if user.is_student:
             programs = Program.objects.filter(subscriber=user)
