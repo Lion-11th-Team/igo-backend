@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.db import models
 
+from profiles.models import Address
+
 ACTIVITY_CATEGORY_CHOICES = (
     ('스마트폰 사용법', '스마트폰 사용법'),
     ('SNS 활용법', 'SNS 활용법'),
@@ -32,7 +34,7 @@ class Program(models.Model):
 
     activity_category = models.CharField(
         max_length=100, choices=ACTIVITY_CATEGORY_CHOICES, blank=True)
-    address = models.CharField(max_length=256)
+    address = models.ForeignKey(to=Address, on_delete=models.CASCADE)
 
     is_rewarded = models.BooleanField(default=False)
 
