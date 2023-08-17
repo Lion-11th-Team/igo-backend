@@ -22,10 +22,13 @@ class ProgramViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Program.objects.order_by('-created_at')
-        search_query = self.request.query_params.get('search', None)
-        if search_query:
+        address_query = self.request.query_params.get('address', None)
+        activity_query = self.request.query_params.get('activity', None)
+        if address_query:
             queryset = queryset.filter(
-                Q(title__icontains=search_query) | Q(content__icontains=search_query) | Q(address__address__icontains=search_query))
+                Q(address__address__icontains=address_query))
+        if activity_query:
+            queryset = queryset.filter(activity_category=activity_query)
         return queryset
 
     def get_permissions(self):
