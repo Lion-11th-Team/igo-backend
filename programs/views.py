@@ -26,7 +26,7 @@ class ProgramViewSet(ModelViewSet):
         activity_query = self.request.query_params.get('activity', None)
         if address_query:
             queryset = queryset.filter(
-                Q(title__icontains=address_query) | Q(content__icontains=address_query) | Q(address__address__icontains=address_query))
+                Q(address__address__icontains=address_query))
         if activity_query:
             queryset = queryset.filter(activity_category=activity_query)
         return queryset
