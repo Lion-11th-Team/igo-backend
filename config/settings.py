@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@w5gitg(43-20lfy#$&g+!=)h1%%n95$j%=mn27ybo7-=o)1i-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -72,7 +72,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['client'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -197,3 +197,8 @@ CORS_ORIGIN_WHITELIST = [
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+ROOT_DIR = os.path.dirname(BASE_DIR)
+STATICFILES_DIRS = [
+    os.path.join(ROOT_DIR, 'client/static')
+]
