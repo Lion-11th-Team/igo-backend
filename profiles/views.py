@@ -26,10 +26,10 @@ class ProfileRetrieveUpdateView(RetrieveUpdateAPIView):
         user = self.get_object()
         if user.is_student:
             serializer = StudentProfileSerializer(
-                request, data=request.data, partial=True)
+                data=request.data, partial=True)
         elif user.is_carer:
             serializer = CarerProfileSerializer(
-                request, data=request.data, partial=True)
+                data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
