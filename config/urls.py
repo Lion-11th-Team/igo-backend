@@ -42,6 +42,10 @@ rental_router.register(r'rental', RentalListRetrieveViewSet, basename='rental')
 donation_router = DefaultRouter()
 donation_router.register(r'donation', DonationViewSet, basename='donation')
 
+profile_router = DefaultRouter()
+profile_router.register(
+    r'profile', ProfileRetrieveUpdateView, basename='profile')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -49,11 +53,11 @@ urlpatterns = [
          OAuthTokenObtainView.as_view(), name='token_obtain'),
     path('auth/refresh', TokenRefreshView.as_view(), name='token_refresh'),
 
-    path('profile/<int:id>/', ProfileRetrieveUpdateView.as_view(), name='profile'),
 
     path('', include(program_router.urls)),
     path('', include(account_router.urls)),
     path('', include(rental_router.urls)),
     path('', include(donation_router.urls)),
+    path('', include(profile_router.urls)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

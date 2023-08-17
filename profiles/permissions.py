@@ -8,4 +8,4 @@ class ProfileRetrievUpdatePermission(BasePermission):
 
         if request.method in SAFE_METHODS:
             return True
-        return request.user == obj.user
+        return request.user == obj

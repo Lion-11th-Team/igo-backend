@@ -25,6 +25,18 @@ class StudentProfileSerializer(ModelSerializer):
             **validate_data, address=address_inst)
         return profile_inst
 
+    def update(self, obj, validated_data):
+        address = obj.address
+        address_data = validated_data.pop('address', None)
+        if address_data:
+            for attr, value in address_data.items():
+                setattr(address, attr, value)
+            address.save()
+        for attr, value in validated_data.items():
+            setattr(obj, attr, value)
+        obj.save()
+        return obj
+
 
 class CarerProfileSerializer(ModelSerializer):
     user = serializers.ReadOnlyField(source='user.pk')
@@ -40,3 +52,15 @@ class CarerProfileSerializer(ModelSerializer):
         profile_inst = CarerProfile.objects.create(
             **validate_data, address=address_inst)
         return profile_inst
+
+    def update(self, obj, validated_data):
+        address = obj.address
+        address_data = validated_data.pop('address', None)
+        if address_data:
+            for attr, value in address_data.items():
+                setattr(address, attr, value)
+            address.save()
+        for attr, value in validated_data.items():
+            setattr(obj, attr, value)
+        obj.save()
+        return obj
