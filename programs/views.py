@@ -25,7 +25,7 @@ class ProgramViewSet(ModelViewSet):
         search_query = self.request.query_params.get('search', None)
         if search_query:
             queryset = queryset.filter(
-                Q(title__icontains=search_query) | Q(content__icontains=search_query) | Q(address__icontains=search_query))
+                Q(title__icontains=search_query) | Q(content__icontains=search_query) | Q(address__address__icontains=search_query))
         return queryset
 
     def get_permissions(self):
