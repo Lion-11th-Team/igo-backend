@@ -196,10 +196,13 @@ CORS_ORIGIN_WHITELIST = [
     'http://igoofficial.com',
 ]
 
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = '/media/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
 
-ROOT_DIR = os.path.dirname(BASE_DIR)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static', 'media')
+
 STATICFILES_DIRS = [
-    os.path.join(ROOT_DIR, 'client/static')
+    os.path.join(os.path.dirname(BASE_DIR), 'static', 'static_dirs'),
+    os.path.join(os.path.dirname(BASE_DIR), 'static', 'media'),
 ]
