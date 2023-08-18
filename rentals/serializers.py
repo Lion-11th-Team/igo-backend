@@ -27,3 +27,4 @@ class RentalContractSerializer(ModelSerializer):
         address_inst = Address.objects.create(**address_data)
         rental_contract_inst = RentalContract.objects.create(
             **validated_data, address=address_inst)
+        return rental_contract_inst
