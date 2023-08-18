@@ -13,7 +13,7 @@ class DonationSerializer(ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        address_data = validated_data.pop('address')
+        address_data = validated_data.pop('sender_address')
         address_inst = Address.objects.create(**address_data)
         donation_inst = Donation.objects.create(
             **validated_data, address=address_inst)
