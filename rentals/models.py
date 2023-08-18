@@ -3,12 +3,20 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 
+CATEGORY_CHOICES = [
+    ('스마트폰', '스마트폰'),
+    ('태블릿', '태블릿'),
+    ('노트북', '노트북'),
+]
+
+
 class Rental(models.Model):
     manufacturer = models.CharField(max_length=256)
     # iPhone 14, Galaxy 22 처럼 일반 사람들이 아는 그 이름
     model_name = models.CharField(max_length=256)
     # SM-f711N 처럼 제조 등록 코드
     model_code = models.CharField(max_length=256)
+    category = models.CharField(max_length=128, choice=CATEGORY_CHOICES)
     image = models.ImageField()
     manufacturing_date = models.DateField()
     registration_date = models.DateField(auto_now_add=True)
