@@ -1,10 +1,13 @@
 from rest_framework.serializers import ModelSerializer
 
 from profiles.models import Address
+from profiles.serializers import AddressSerializer
 from .models import Donation
 
 
 class DonationSerializer(ModelSerializer):
+    sender_address = AddressSerializer(many=False, read_only=False)
+
     class Meta:
         model = Donation
         fields = '__all__'
