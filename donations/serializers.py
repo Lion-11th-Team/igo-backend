@@ -16,5 +16,5 @@ class DonationSerializer(ModelSerializer):
         address_data = validated_data.pop('sender_address')
         address_inst = Address.objects.create(**address_data)
         donation_inst = Donation.objects.create(
-            **validated_data, address=address_inst)
+            **validated_data, sender_address=address_inst)
         return donation_inst

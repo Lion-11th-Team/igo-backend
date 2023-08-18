@@ -3,9 +3,9 @@ from django.db import models
 from profiles.models import Address
 
 DONATION_MODEL_CATEGORY = (
-    ('smartphone', '스마트폰'),
-    ('tablet', '태블릿'),
-    ('laptop', '노트북'),
+    ('스마트폰', '스마트폰'),
+    ('태블릿', '태블릿'),
+    ('노트북', '노트북'),
 )
 
 
