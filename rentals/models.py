@@ -16,7 +16,8 @@ class Rental(models.Model):
     model_name = models.CharField(max_length=256)
     # SM-f711N 처럼 제조 등록 코드
     model_code = models.CharField(max_length=256)
-    category = models.CharField(max_length=128, choice=CATEGORY_CHOICES)
+    category = models.CharField(
+        max_length=128, choices=CATEGORY_CHOICES)
     image = models.ImageField()
     manufacturing_date = models.DateField()
     registration_date = models.DateField(auto_now_add=True)
