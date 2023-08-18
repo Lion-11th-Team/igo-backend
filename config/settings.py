@@ -193,8 +193,8 @@ SIMPLE_JWT = {
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
     'http://www.igoofficial.com',
-    'http://localhost:3000',
     'http://igoofficial.com',
+    'http://localhost:3000',
 ]
 
 STATIC_URL = '/static/'
