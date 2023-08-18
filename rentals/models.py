@@ -2,6 +2,8 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from profiles.models import Address
+
 
 CATEGORY_CHOICES = [
     ('스마트폰', '스마트폰'),
@@ -41,7 +43,9 @@ class RentalContract(models.Model):
 
     addressee_name = models.CharField(max_length=256)
     addressee_phone = models.CharField(max_length=64)
-    address = models.CharField(max_length=256)
+    # address = models.CharField(max_length=256)
+    address = models.ForeignKey(
+        to=Address, related_name='rental_contract', on_delete=models.CASCADE)
 
     @property
     def status(self):
