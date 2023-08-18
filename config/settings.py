@@ -193,6 +193,7 @@ SIMPLE_JWT = {
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
+    'http://igoofficial.com',
 ]
 
 MEDIA_ROOT = BASE_DIR / 'media'
