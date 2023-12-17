@@ -10,6 +10,7 @@ from profiles.models import CarerProfile
 
 from programs.models import Program
 from programs.serializers import ProgramSerializer
+from rest_framework.permissions import AllowAny
 from .permissions import IsCarer, IsProgramAuthor, IsStudent
 
 
@@ -40,6 +41,8 @@ class ProgramViewSet(ModelViewSet):
             permission_classes = [IsAuthenticated, IsCarer]
         elif self.action in ['update', 'partial_update', 'destroy']:
             permission_classes = [IsAuthenticated, IsCarer, IsProgramAuthor]
+        elif self.action in ['retrieve']:
+            permission_classes = [AllowAny]
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
