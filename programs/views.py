@@ -44,7 +44,7 @@ class ProgramViewSet(ModelViewSet):
         elif self.action in ['retrieve']:
             permission_classes = [AllowAny]
         else:
-            permission_classes = [IsAuthenticated]
+            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
     @action(detail=True, methods=('POST', 'DELETE'))
